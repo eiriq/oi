@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Especial</title>
+    <style>
+        :root {
+            --background-color: #1e1e2f;
+            --text-color: #ffffff;
+            --accent-color: #ff6f91;
+            --popup-bg: rgba(0, 0, 0, 0.8);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        textarea {
+            width: 80%;
+            max-width: 600px;
+            height: 100px;
+            margin: 1rem 0;
+            border-radius: 10px;
+            border: none;
+            padding: 1rem;
+            font-size: 1rem;
+        }
+
+        .btn {
+            background-color: var(--accent-color);
+            color: var(--text-color);
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin: 1rem;
+            transition: transform 0.3s;
+        }
+
+        .btn:hover {
+            transform: scale(1.1);
+        }
+
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--popup-bg);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .popup {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 80%;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .qr-container {
+            display: none;
+            animation: appear 1s forwards;
+        }
+
+        @keyframes appear {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        img {
+            max-width: 80%;
+            height: auto;
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Como nos conhecemos?</h1>
+    <textarea id="response"></textarea>
+    <button class="btn" onclick="showPopup(1)">Enviar</button>
+
+    <div class="popup-overlay" id="popup-overlay">
+        <div class="popup" id="popup"></div>
+    </div>
+
+    <div class="qr-container" id="qr-container">
+        <img src="code.png" alt="QR Code">
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Como nos conhecemos?",
+                response: `Quando eu te conheci naquele aplicativo eu sabia que era uma pessoa diferente, era uma menina incrível, gentil e bem amorosa. Era uma pessoa diferente de muita gente que eu tinha conhecido, e esse seu jeitinho especial que me fez ficar cada vez mais próximo de você. Espero que tenha entendido tudo desde o começo, e tudo que eu falei era a verdade, não tem um momento em que eu não pense na sorte que tive de ter você.`
+            },
+            {
+                question: "Você me ama?",
+                response: `É bom que saiba disso porque eu também te amo, é algo muito importante pra mim e saber que você compartilha do mesmo sentimento é algo que me deixa à vontade pra lutar por você cada vez mais.`
+            },
+            {
+                question: "Posso falar o que sinto?",
+                response: `Eu talvez não seja a pessoa incrível que acha que eu seja, sabe? A realidade é que às vezes eu me chateio com pouca coisa... Eu te amo tanto.`
+            },
+            {
+                question: "Você sabe dos meus problemas?",
+                response: `Hoje é o dia que vamos nos encontrar no shopping... eu sempre guardo muitas fraquezas. Eu te amo, e espero ser suficiente pra você.`
+            },
+            {
+                question: "Você me perdoa?",
+                response: `Por tudo que já fiz, eu não sou o melhor, mas eu tento o meu melhor pra ser o que você merece. Eu te amo.`
+            },
+            {
+                question: "Você sabe o que eu quero com tudo isso?",
+                response: `Que bom, mesmo que saiba ou não saiba, quero te mostrar. Então por isso, escaneie esse QR Code aqui, tá? Espero que esteja pronta.`,
+                final: true
+            }
+        ];
+
+        let currentQuestion = 0;
+
+        function showPopup(next) {
+            const popupOverlay = document.getElementById('popup-overlay');
+            const popup = document.getElementById('popup');
+            const response = document.getElementById('response').value.trim();
+
+            if (!response) {
+                alert('Por favor, escreva algo antes de enviar.');
+                return;
+            }
+
+            popup.innerHTML = questions[currentQuestion].response;
+            popupOverlay.style.display = 'flex';
+
+            document.getElementById('response').value = '';
+
+            popupOverlay.onclick = () => {
+                popupOverlay.style.display = 'none';
+                if (questions[currentQuestion].final) {
+                    document.querySelector('h1').style.display = 'none';
+                    document.querySelector('textarea').style.display = 'none';
+                    document.querySelector('.btn').style.display = 'none';
+                    document.getElementById('qr-container').style.display = 'block';
+                } else {
+                    currentQuestion++;
+                    document.querySelector('h1').textContent = questions[currentQuestion].question;
+                }
+            };
+        }
+    </script>
+</body>
+</html>
+
